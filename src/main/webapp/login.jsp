@@ -10,7 +10,7 @@
 <div class="container">
     <form action="login" method="post">
         <label><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="login" required>
+        <input type="text" placeholder="Enter E-mail" name="email" required>
         <label><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>
         <button type="submit"><b>Login</b></button>

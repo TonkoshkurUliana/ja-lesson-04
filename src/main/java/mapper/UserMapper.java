@@ -8,12 +8,12 @@ import java.sql.SQLException;
 public class UserMapper {
     public static User map(ResultSet result) throws SQLException {
         int id = result.getInt("id");
-        String login = result.getString("login");
+        String role = result.getString("role");
         String firstName = result.getString("firstName");
         String  lastName = result.getString("lastName");
         String email = result.getString("email");
         String password = result.getString("password");
 
-        return new User( login, firstName, lastName, email, password);
+        return new User(email, firstName, lastName, password,role);
     }
 }

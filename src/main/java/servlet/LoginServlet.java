@@ -5,12 +5,16 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import service.UserService;
+import service.impl.UserServiceImpl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(name = "login", value = "/login")
 
 public class LoginServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -18,19 +22,27 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        UserService userService = UserService.getUserService();
-        User user = userService.getUser(login);
 
+        User user = null;
+        try {
+            UserService userService = UserServiceImpl.getUserServiceImpl();
+            user = userService.getbyUserEmail(email);
+            System.out.println(user);
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.out.println(user);
+            throw new RuntimeException(e);
+        }
+        System.out.println(user);
         if (user == null) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
         assert user != null;
         if (user.getUserPassword().equals(password)) {
-            request.setAttribute("userEmail", login);
+            request.setAttribute("userEmail", email);
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 

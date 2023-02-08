@@ -5,6 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import service.UserService;
+import service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,7 +13,10 @@ import java.sql.SQLException;
 @WebServlet(name = "registration", value = "/registration")
 
 public class RegistrationServlet extends HttpServlet {
-    private UserService userService = UserService.getUserService();
+    private UserService userService = UserServiceImpl.getUserServiceImpl();
+
+    public RegistrationServlet() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,10 +30,10 @@ public class RegistrationServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String login = request.getParameter("login");
+        String role = "user";
+        userService.create(new User(email, firstName, lastName, password,role));
 
-        userService.saveUser(new User(login, firstName, lastName, email, password));
-        request.setAttribute("userEmail", login);
+        request.setAttribute("userEmail", role);
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
